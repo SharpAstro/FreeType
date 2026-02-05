@@ -10,14 +10,14 @@
             "request": "launch",
             "preLaunchTask": "buildGenerator",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/FreeTypeSharp.Generator/bin/Debug/net8.0/FreeTypeSharp.Generator.dll",
+            "program": "${workspaceFolder}/FreeTypeSharp.Generator/bin/Debug/net9.0/FreeTypeSharp.Generator.dll",
             "args": [
                 "-o${workspaceFolder}/FreeTypeSharp/Generated",
                 "-f${workspaceFolder}/FreeTypeSharp.Generator/main.h",
                 "-i${workspaceFolder}/freetype/include",
                 "-nFreeTypeSharp"
             ],
-            "cwd": "${workspaceFolder}/FreeTypeSharp.Generator/bin/Debug/net8.0",
+            "cwd": "${workspaceFolder}/FreeTypeSharp.Generator/bin/Debug/net9.0",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false
@@ -31,9 +31,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/FreeTypeSharp.SkiaDemo/bin/Debug/net8.0/FreeTypeSharp.SkiaDemo.dll",
+            "program": "${workspaceFolder}/FreeTypeSharp.SkiaDemo/bin/Debug/net9.0/FreeTypeSharp.SkiaDemo.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/FreeTypeSharp.SkiaDemo/bin/Debug/net8.0",
+            "cwd": "${workspaceFolder}/FreeTypeSharp.SkiaDemo/bin/Debug/net9.0",
             // For more information about the 'console' field, see https://aka.ms/VSCode-CS-LaunchJson-Console
             "console": "internalConsole",
             "stopAtEntry": false

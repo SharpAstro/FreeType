@@ -20,10 +20,11 @@ jobs:
         include:
           - { os: windows-latest,   rid: win-x64,       cmake_extra: "-A x64" }
           - { os: windows-latest,   rid: win-x86,       cmake_extra: "-A Win32" }
-          - { os: windows-latest,   rid: win-arm64,     cmake_extra: "-A ARM64" }
+          - { os: windows-11-arm,   rid: win-arm64,     cmake_extra: "" }
           - { os: ubuntu-latest,    rid: linux-x64,     cmake_extra: "" }
           - { os: ubuntu-24.04-arm, rid: linux-arm64,   cmake_extra: "" }
-          - { os: macos-latest,     rid: osx,           cmake_extra: "-DCMAKE_OSX_ARCHITECTURES='arm64;x86_64' -DFT_DISABLE_PNG=ON" }
+          - { os: macos-latest,     rid: osx-arm64,     cmake_extra: "-DCMAKE_OSX_ARCHITECTURES=arm64 -DCMAKE_OSX_DEPLOYMENT_TARGET=11" }
+          - { os: macos-latest,     rid: osx-x64,       cmake_extra: "-DCMAKE_OSX_ARCHITECTURES=x86_64 -DCMAKE_OSX_DEPLOYMENT_TARGET=11 -DFT_DISABLE_PNG=ON" }
 
     runs-on: ${{ matrix.os }}
     steps:
@@ -34,6 +35,11 @@ jobs:
       - name: Install libpng (Linux)
         if: runner.os == 'Linux'
         run: sudo apt-get update && sudo apt-get install -y libpng-dev zlib1g-dev
+
+      - name: Apply Win64 patch (FT_Long as int64)
+        if: runner.os == 'Windows'
+        shell: bash
+        run: git apply patches/0001-Win64-FT_Long-as-int64.patch --directory=freetype
 
       - name: Configure FreeType
         run: cmake -S freetype -B freetype/build ${{ env.FREETYPE_CMAKE_FLAGS }} ${{ matrix.cmake_extra }}
@@ -86,18 +92,21 @@ jobs:
         with:
           path: native-artifacts
 
+      - name: Create macOS fat library
+        run: lipo -create native-artifacts/native-osx-arm64/libfreetype.dylib native-artifacts/native-osx-x64/libfreetype.dylib -output native-artifacts/libfreetype.dylib
+
       - name: Place native binaries in runtimes
         run: |
-          cp native-artifacts/native-win-x64/freetype.dll   runtimes/FreeType2/win-x64/freetype.dll
-          cp native-artifacts/native-win-x86/freetype.dll   runtimes/FreeType2/win-x86/freetype.dll
-          cp native-artifacts/native-win-arm64/freetype.dll  runtimes/FreeType2/win-arm64/freetype.dll
-          cp native-artifacts/native-linux-x64/libfreetype.so  runtimes/FreeType2/linux-x64/libfreetype.so
+          cp native-artifacts/native-win-x64/freetype.dll     runtimes/FreeType2/win-x64/freetype.dll
+          cp native-artifacts/native-win-x86/freetype.dll     runtimes/FreeType2/win-x86/freetype.dll
+          cp native-artifacts/native-win-arm64/freetype.dll   runtimes/FreeType2/win-arm64/freetype.dll
+          cp native-artifacts/native-linux-x64/libfreetype.so   runtimes/FreeType2/linux-x64/libfreetype.so
           cp native-artifacts/native-linux-arm64/libfreetype.so runtimes/FreeType2/linux-arm64/libfreetype.so
-          cp native-artifacts/native-osx/libfreetype.dylib   runtimes/FreeType2/osx/libfreetype.dylib
+          cp native-artifacts/libfreetype.dylib                 runtimes/FreeType2/osx/libfreetype.dylib
           # Also copy to win10 runtimes
-          cp native-artifacts/native-win-x64/freetype.dll   runtimes/FreeType2/win10-x64/freetype.dll
-          cp native-artifacts/native-win-x86/freetype.dll   runtimes/FreeType2/win10-x86/freetype.dll
-          cp native-artifacts/native-win-arm64/freetype.dll  runtimes/FreeType2/win10-arm64/freetype.dll
+          cp native-artifacts/native-win-x64/freetype.dll     runtimes/FreeType2/win10-x64/freetype.dll
+          cp native-artifacts/native-win-x86/freetype.dll     runtimes/FreeType2/win10-x86/freetype.dll
+          cp native-artifacts/native-win-arm64/freetype.dll   runtimes/FreeType2/win10-arm64/freetype.dll
 
       - name: Pack NuGet
         run: dotnet pack FreeTypeSharp/FreeTypeSharp.csproj -c $BUILD_CONF -p:PackageVersion=$VERSION_PREFIX

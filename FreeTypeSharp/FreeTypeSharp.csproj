@@ -26,15 +26,15 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <PackageProjectUrl>https://github.com/ryancheung/FreeTypeSharp</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/ryancheung/FreeTypeSharp</RepositoryUrl>
-    <Authors>ryancheung</Authors>
+    <PackageProjectUrl>https://github.com/SharpAstro/FreeTypeBindings</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/SharpAstro/FreeTypeBindings.git</RepositoryUrl>
+    <Authors>ryancheung;SharpAstro</Authors>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <Description>A modern cross-platform managed FreeType2 library.</Description>
-    <PackageTags>freetype2;netstandard2.0;.net10.0;</PackageTags>
-    <PackageId>FreeTypeSharp</PackageId>
-    <Copyright>Copyright 2024 ryancheung</Copyright>
+    <Description>Cross-platform managed FreeType2 library with COLRv1 color glyph support. Fork of FreeTypeSharp with FreeType 2.14.2.</Description>
+    <PackageTags>freetype2;netstandard2.0;.net10.0;colrv1;color-emoji</PackageTags>
+    <PackageId>SharpAstro.FreeTypeBindings</PackageId>
+    <Copyright>Copyright 2024 ryancheung, 2026 SharpAstro</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
